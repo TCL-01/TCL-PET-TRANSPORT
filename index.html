@@ -211,18 +211,16 @@ After our team has finalized the review, the payment details will be promptly se
 
 <script>
 // ===== MANUAL TRACKING ID (RESET FACTOR) =====
-const MANUAL_TRACKING_ID = "TCL-284123"; // <-- change this manually to reset the form for new submissions
+const MANUAL_TRACKING_ID = "TCL-284123"; // change this manually to reset the form
 
 // TRACK LOCK
 function getTrackingLockKey(){
-    const id = MANUAL_TRACKING_ID; // use manual ID as the lock factor
-    return "tcl_locked_" + id;
+    return "tcl_locked_" + MANUAL_TRACKING_ID;
 }
 
 document.addEventListener("DOMContentLoaded", function(){
-    tracking_id.value = MANUAL_TRACKING_ID; // assign manual tracking ID to the form
+    tracking_id.value = MANUAL_TRACKING_ID; 
     const lockKey = getTrackingLockKey();
-
     if(localStorage.getItem(lockKey)==="true"){
         document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
         final.classList.remove("hidden");
@@ -265,30 +263,7 @@ function validateAndStartReview(){
     startReview();
 }
 
-// PAYMENT CALCULATION
-function calculatePayment(){
-    const distanceMiles=360.30;
-    const ratePerMile=0.75;
-    const baseFeeVal=128.10;
-    const insuranceVal=48.05;
-    const crateVal=38.44;
-    const healthVal=25.62;
-    const depositPercent=100.00;
-    const distanceVal=distanceMiles*ratePerMile;
-    const total=baseFeeVal+distanceVal+insuranceVal+crateVal+healthVal;
-    const depositVal=total*depositPercent;
-    const balanceVal=total-depositVal;
-    baseFee.textContent=baseFeeVal.toFixed(2);
-    distanceFee.textContent=distanceVal.toFixed(2);
-    insuranceFee.textContent=insuranceVal.toFixed(2);
-    crateFee.textContent=crateVal.toFixed(2);
-    healthFee.textContent=healthVal.toFixed(2);
-    totalCost.textContent=total.toFixed(2);
-    deposit.textContent=depositVal.toFixed(2);
-    balance.textContent=balanceVal.toFixed(2);
-}
-
-// START REVIEW
+// START REVIEW (MANUAL PAYMENT)
 function startReview(){
     owner_phone_full.value=owner_code.value+' '+owner_phone.value;
     receiver_phone_full.value=receiver_code.value+' '+receiver_phone.value;
@@ -313,7 +288,17 @@ EMAIL: ${receiver_email.value}`;
     setTimeout(()=>{
         review.classList.add('hidden');
         summary.classList.remove('hidden');
-        calculatePayment();
+
+        // MANUAL PAYMENT VALUES
+        baseFee.textContent = "150.60";
+        distanceFee.textContent = "400.15";
+        insuranceFee.textContent = "53.20";
+        crateFee.textContent = "40.20";
+        healthFee.textContent = "50.66";
+        totalCost.textContent = "694.37";
+        deposit.textContent = "100.00";
+        balance.textContent = "594.37";
+
     },30000);
 }
 
@@ -330,8 +315,8 @@ function cancelSubmit(){
 // FINAL SUBMIT
 function submitForm(){
     const lockKey = getTrackingLockKey();
-    if(localStorage.getItem(lockKey)==="true") return; // prevent resubmission
-    localStorage.setItem(lockKey,"true"); // lock this manual tracking ID
+    if(localStorage.getItem(lockKey)==="true") return;
+    localStorage.setItem(lockKey,"true");
     document.querySelectorAll(".container").forEach(c=>c.classList.add("hidden"));
     wait.classList.remove('hidden');
     setTimeout(()=>{
@@ -342,4 +327,4 @@ function submitForm(){
 }
 </script>
 </body>
-                        </html>
+</html>
