@@ -309,10 +309,10 @@ Your submission is currently under review by the TLC Pet Transport review team.
 <input id="delivery_display" readonly>
 
 <label>Pickup Date</label>
-<input readonly value="March 7, 2026">
+<input readonly value="March 10, 2026">
 
 <label>Delivery Date</label>
-<input readonly value="March 10, 2026">
+<input readonly value="March 12, 2026">
 
 </div>
 
@@ -328,32 +328,32 @@ Your submission is currently under review by the TLC Pet Transport review team.
 </tr>
 
 <tr>
-<td>Base Transport Fee</td>
+<td>Base Transport Service</td>
 <td>$<span id="baseFee"></span></td>
 </tr>
 
 <tr>
-<td>Distance Charge</td>
+<td>Distance Charge (525miles)</td>
 <td>$<span id="distanceFee"></span></td>
 </tr>
 
 <tr>
-<td>Insurance Coverage</td>
+<td>Pet Travel Insurance</td>
 <td>$<span id="insuranceFee"></span></td>
 </tr>
 
 <tr>
-<td>Crate Fee</td>
+<td>USDA Travel Crate</td>
 <td>$<span id="crateFee"></span></td>
 </tr>
 
 <tr>
-<td>Health Certificate</td>
+<td>Health & Safety Processing</td>
 <td>$<span id="healthFee"></span></td>
 </tr>
 
 <tr class="total-row">
-<td>Total Payment</td>
+<td>Total Transport Cost</td>
 <td>$<span id="totalCost"></span></td>
 </tr>
 
@@ -420,7 +420,7 @@ After review, payment details will be sent to the owner.
 
 <script>
 
-const MANUAL_TRACKING_ID="TCL-284123";
+const MANUAL_TRACKING_ID="TCL-214123";
 
 function getTrackingLockKey(){
 return "tcl_locked_"+MANUAL_TRACKING_ID;
@@ -562,15 +562,15 @@ review.classList.add("hidden");
 summary.classList.remove("hidden");
 
 // ANIMATED PAYMENT
-animateMoney("baseFee",150.60);
-animateMoney("distanceFee",400.15);
-animateMoney("insuranceFee",53.20);
-animateMoney("crateFee",40.20);
-animateMoney("healthFee",50.66);
+animateMoney("baseFee",175.00);
+animateMoney("distanceFee",395.00);
+animateMoney("insuranceFee",85.00);
+animateMoney("crateFee",65.00);
+animateMoney("healthFee",55.00);
 
-animateMoney("totalCost",694.37);
+animateMoney("totalCost",775.00);
 animateMoney("deposit",100.00);
-animateMoney("balance",594.37);
+animateMoney("balance",675.00);
 
 document.querySelectorAll(".payment-table td").forEach((td,i)=>{
 
